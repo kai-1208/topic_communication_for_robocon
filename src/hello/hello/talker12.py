@@ -5,7 +5,7 @@ from pyPS4Controller.controller import Controller
 import os
 import subprocess
 import time
-os.environ['ROS_DOMAIN_ID'] = '2'
+os.environ['ROS_DOMAIN_ID'] = '0'
 
 class MyController(Controller, Node):
     def __init__(self, **kwargs):
@@ -24,9 +24,6 @@ class MyController(Controller, Node):
     
     def on_options_press(self):
         subprocess.run("export ROS_DOMAIN_ID=2 && ros2 run hello talker", shell=True)
-            
-    def on_playstation_button_press(self):
-        subprocess.run("export ROS_DOMAIN_ID=3 && ros2 run hello talker", shell=True)
         
     # 箱回収の上げる方
     def on_circle_press(self):
