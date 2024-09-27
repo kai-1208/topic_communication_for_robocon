@@ -5,6 +5,7 @@ from pyPS4Controller.controller import Controller
 import os
 import subprocess
 import time
+
 os.environ['ROS_DOMAIN_ID'] = '0'
 i = 1
 
@@ -13,7 +14,8 @@ class MyController(Controller, Node):
         Controller.__init__(self, **kwargs)
         Node.__init__(self, 'ps4_controller_node')
         self.publisher_ = self.create_publisher(MyString, 'chatter', 1)
-        self.timer = self.create_timer(1, self.timer_callback)  # 0.01秒ごとにtimer_callbackを呼び出す
+        # 0.01秒ごとにtimer_callbackを呼び出す
+        self.timer = self.create_timer(1, self.timer_callback)
 
     def timer_callback(self):
         # コントローラーのイベントをリッスンするためのポーリング
@@ -28,28 +30,36 @@ class MyController(Controller, Node):
 
     # change ros domein id by じゅうじぼたん
     def on_right_arrow_press(self):
-        i++
+        global i
+        i += 1
         if i > 3:
             i = 1
-        subprocess.run(f"export ROS_DOMAIN_ID={i} && ros2 run hello talker", shell=True)
+        subprocess.run(f"export ROS_DOMAIN_ID={
+                       i} && ros2 run hello talker", shell=True)
 
     def on_up_arrow_press(self):
-        i++
+        global i
+        i += 1
         if i > 3:
             i = 1
-        subprocess.run(f"export ROS_DOMAIN_ID={i} && ros2 run hello talker", shell=True)
-        
+        subprocess.run(f"export ROS_DOMAIN_ID={
+                       i} && ros2 run hello talker", shell=True)
+
     def on_left_arrow_press(self):
-        i++
+        global i
+        i += 1
         if i > 3:
             i = 1
-        subprocess.run(f"export ROS_DOMAIN_ID={i} && ros2 run hello talker", shell=True)
-      
+        subprocess.run(f"export ROS_DOMAIN_ID={
+                       i} && ros2 run hello talker", shell=True)
+
     def on_down_arrow_press(self):
-        i++
+        global i
+        i += 1
         if i > 3:
             i = 1
-        subprocess.run(f"export ROS_DOMAIN_ID={i} && ros2 run hello talker", shell=True)
+        subprocess.run(f"export ROS_DOMAIN_ID={
+                       i} && ros2 run hello talker", shell=True)
 
     # 回収緊急停止
     def on_down_arrow_press(self):
@@ -150,7 +160,8 @@ class MyController(Controller, Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
+    controller = MyController(interface="/dev/input/js0",
+                              connecting_using_ds4drv=False)
     rclpy.spin(controller)  # コントローラーとROS2ノードを同時に実行
 
     # コントローラが停止したら、ノードを破棄してROS通信をシャットダウンする
