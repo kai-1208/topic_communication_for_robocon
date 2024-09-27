@@ -5,8 +5,7 @@ from pyPS4Controller.controller import Controller
 import os
 import subprocess
 import time
-os.environ['ROS_DOMAIN_ID'] = '0'
-i = 1
+os.environ['ROS_DOMAIN_ID'] = '1'
 
 class MyController(Controller, Node):
     def __init__(self, **kwargs):
@@ -18,38 +17,98 @@ class MyController(Controller, Node):
     def timer_callback(self):
         # コントローラーのイベントをリッスンするためのポーリング
         self.listen(timeout=5)
+        
+    # id wo kimeru
+    def on_share_press(self):
+        subprocess.run("export ROS_DOMAIN_ID=1 && ros2 run hello talker", shell=True)
+    
+    def on_options_press(self):
+        subprocess.run("export ROS_DOMAIN_ID=2 && ros2 run hello talker", shell=True)
+            
+    def on_playstation_button_press(self):
+        subprocess.run("export ROS_DOMAIN_ID=3 && ros2 run hello talker", shell=True)
+        
+    # 箱回収の上げる方
+    def on_circle_press(self):
+        msg = MyString()
+        msg.data = "circle"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
+
+    def on_circle_release(self):
+        msg = MyString()
+        msg.data = "release"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
+
+    def on_triangle_press(self):
+        msg = MyString()
+        msg.data = "triangle"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
+
+    def on_triangle_release(self):
+        msg = MyString()
+        msg.data = "release"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
+
+    def on_square_press(self):
+        msg = MyString()
+        msg.data = "square"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
+
+    def on_square_release(self):
+        msg = MyString()
+        msg.data = "release"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
 
     # オムニ緊急停止
-    def on_cross_press(self):
+    def on_x_press(self):
         msg = MyString()
         msg.data = "cross"
         self.publisher_.publish(msg)
         self.get_logger().info("Published: " + msg.data)
 
-    # change ros domein id by じゅうじぼたん
+
+    # 箱回収の下げる方
     def on_right_arrow_press(self):
-        i++
-        if i > 3:
-            i = 1
-        subprocess.run(f"export ROS_DOMAIN_ID={i} && ros2 run hello talker", shell=True)
+        msg = MyString()
+        msg.data = "right"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
+    
+    def on_right_arrow_release(self):
+        msg = MyString()
+        msg.data = "release"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
 
     def on_up_arrow_press(self):
-        i++
-        if i > 3:
-            i = 1
-        subprocess.run(f"export ROS_DOMAIN_ID={i} && ros2 run hello talker", shell=True)
+        msg = MyString()
+        msg.data = "up"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
+
+    def on_up_arrow_release(self):
+        msg = MyString()
+        msg.data = "release"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
         
     def on_left_arrow_press(self):
-        i++
-        if i > 3:
-            i = 1
-        subprocess.run(f"export ROS_DOMAIN_ID={i} && ros2 run hello talker", shell=True)
-      
-    def on_down_arrow_press(self):
-        i++
-        if i > 3:
-            i = 1
-        subprocess.run(f"export ROS_DOMAIN_ID={i} && ros2 run hello talker", shell=True)
+        msg = MyString()
+        msg.data = "left"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
+
+    def on_left_arrow_release(self):
+        msg = MyString()
+        msg.data = "release"
+        self.publisher_.publish(msg)
+        self.get_logger().info("Published: " + msg.data)
 
     # 回収緊急停止
     def on_down_arrow_press(self):
